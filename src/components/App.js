@@ -15,14 +15,26 @@ const App = () => {
 
     useEffect(()=>{
         console.log('component mounted')
-        setTimeout(()=>{
-           setProductsState(products)
-        }, 4000)
+        fetch('https://fakestoreapi.com/products/')
+        .then(res=>res.json())
+        .then(prodArray=>{
+            const newProdState = prodArray.map((prod)=>{
+                return prod.title
+            })
+            setProductsState(newProdState)
+        })
+        // setTimeout(()=>{
+        //    setProductsState(products)
+        // }, 3000)
     }, [])
+
+    const hasProducts = productsState.length > 0
 
     return ( 
     <div> 
-        <SearchBar products={productsState}/>
+        
+        {hasProducts ? <SearchBar products={productsState} /> : 'loading...'}
+
         <CountButton incrementBy={1} buttonColor={'blue'}/>
         <CountButton incrementBy={5} buttonColor={'green'}/>
         <CountButton incrementBy={15} buttonColor={'red'}/>
